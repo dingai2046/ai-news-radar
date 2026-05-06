@@ -13,11 +13,57 @@ const state = {
   siteFilter: "",
   query: "",
   mode: "ai",
+  topicTab: "ai", // "ai" | "longevity"
   waytoagiMode: "today",
   waytoagiData: null,
   sourceStatus: null,
   generatedAt: null,
 };
+
+// 长寿/AI健康/意识/基因 关键词（中英混合,匹配 title/title_zh/title_en/source 任意字段）
+const LONGEVITY_KEYWORDS = [
+  // 中文 - 长寿/抗衰
+  "长寿", "寿命", "衰老", "抗衰", "延寿", "不老", "永生", "返老还童",
+  // 中文 - 基因/细胞
+  "基因治疗", "基因编辑", "干细胞", "端粒", "表观遗传", "细胞重编程",
+  // 中文 - 意识/神经
+  "意识上传", "数字永生", "脑机接口", "脑科学", "阿尔茨海默", "帕金森",
+  // 中文 - AI 医疗
+  "AI医疗", "AI 医疗", "AI诊断", "AI 诊断", "AI药物", "AI 药物", "AI制药", "AI 制药",
+  "数字医疗", "智慧医疗", "精准医疗", "生物科技", "生命科学",
+  // English - longevity/aging
+  "longevity", "aging", "anti-aging", "antiaging", "lifespan", "healthspan",
+  "rejuvenation", "immortal", "immortality", "life extension", "live forever",
+  // English - bio/gene
+  "gene therapy", "gene editing", "crispr", "stem cell", "telomere",
+  "senescence", "senolytic", "epigenetic", "reprogramming", "yamanaka",
+  // English - molecules
+  "rapamycin", "metformin", "nad+", " nad ", "sirtuin", "autophagy", "mtor",
+  // English - consciousness/neuro
+  "consciousness", "mind upload", "brain-computer", "neuralink", "bci",
+  "alzheimer", "parkinson", "neurodegenerat", "cognitive decline",
+  // English - AI medicine
+  "ai drug", "ai-drug", "ai diagnos", "ai medicine", "ai health", "ai-health",
+  "alphafold", "isomorphic", "deepmind health", "medical ai",
+  "biotech", "biopharma", "clinical trial",
+];
+
+const LONGEVITY_KEYWORDS_LC = LONGEVITY_KEYWORDS.map((k) => k.toLowerCase());
+
+function matchesLongevity(item) {
+  const hay = [
+    item.title || "",
+    item.title_zh || "",
+    item.title_en || "",
+    item.title_original || "",
+    item.source || "",
+    item.site_name || "",
+  ].join(" ").toLowerCase();
+  for (const kw of LONGEVITY_KEYWORDS_LC) {
+    if (hay.includes(kw)) return true;
+  }
+  return false;
+}
 
 const statsEl = document.getElementById("stats");
 const siteSelectEl = document.getElementById("siteSelect");
@@ -42,7 +88,18 @@ const waytoagiMetaEl = document.getElementById("waytoagiMeta");
 const waytoagiListEl = document.getElementById("waytoagiList");
 const waytoagiTodayBtnEl = document.getElementById("waytoagiTodayBtn");
 const waytoagi7dBtnEl = document.getElementById("waytoagi7dBtn");
+const waytoagiWrapEl = document.getElementById("waytoagiWrap");
 const coverageStripEl = document.getElementById("coverageStrip");
+
+const tabAiBtnEl = document.getElementById("tabAi");
+const tabLongevityBtnEl = document.getElementById("tabLongevity");
+const tabAiCountEl = document.getElementById("tabAiCount");
+const tabLongevityCountEl = document.getElementById("tabLongevityCount");
+const heroTagEl = document.getElementById("heroTag");
+const heroTitleEl = document.getElementById("heroTitle");
+const heroSubEl = document.getElementById("heroSub");
+const longevityMetaEl = document.getElementById("longevityMeta");
+const longevityMetaHintEl = document.getElementById("longevityMetaHint");
 
 const SOURCE_KINDS = {
   official_ai: { label: "官方", tone: "official" },
@@ -238,7 +295,14 @@ function renderModeSwitch() {
   if (allDedupeWrapEl) allDedupeWrapEl.classList.toggle("show", state.mode === "all");
   if (allDedupeToggleEl) allDedupeToggleEl.checked = state.allDedup;
   if (allDedupeLabelEl) allDedupeLabelEl.textContent = state.allDedup ? "去重开" : "去重关";
-  if (state.mode === "ai") {
+
+  if (state.topicTab === "longevity") {
+    // 长寿 tab 时,mode hint 显示长寿条数
+    const items = state.allDataLoaded ? effectiveAllItems() : state.itemsAi;
+    const lc = items.filter(matchesLongevity).length;
+    modeHintEl.textContent = `🧬 长寿科技 · ${fmtNumber(lc)} 条`;
+    if (listTitleEl) listTitleEl.textContent = "长寿科技 / AI 健康";
+  } else if (state.mode === "ai") {
     modeHintEl.textContent = `AI强相关 · ${fmtNumber(state.totalAi)} 条`;
     if (listTitleEl) listTitleEl.textContent = "AI 信号流";
   } else {
@@ -251,11 +315,94 @@ function renderModeSwitch() {
   renderAdvancedSummary();
 }
 
+function refreshTabCounts() {
+  if (tabAiCountEl) tabAiCountEl.textContent = fmtNumber(state.totalAi);
+  if (tabLongevityCountEl) tabLongevityCountEl.textContent = state.allDataLoaded
+    ? fmtNumber(longevityCount())
+    : "...";
+}
+
+function renderTopicTabs() {
+  if (tabAiBtnEl) {
+    tabAiBtnEl.classList.toggle("active", state.topicTab === "ai");
+    tabAiBtnEl.setAttribute("aria-selected", state.topicTab === "ai" ? "true" : "false");
+  }
+  if (tabLongevityBtnEl) {
+    tabLongevityBtnEl.classList.toggle("active", state.topicTab === "longevity");
+    tabLongevityBtnEl.setAttribute("aria-selected", state.topicTab === "longevity" ? "true" : "false");
+  }
+  // Hero 文案随 tab 切换
+  if (state.topicTab === "longevity") {
+    if (heroTagEl) heroTagEl.textContent = "LONGEVITY · BIO · CONSCIOUSNESS";
+    if (heroTitleEl) heroTitleEl.textContent = "🧬 长寿科技 · AI 健康雷达";
+    if (heroSubEl) heroSubEl.textContent = "长寿/抗衰/基因治疗/意识与神经科学/AI 医疗 — 全网信号关键词过滤";
+    if (longevityMetaEl) longevityMetaEl.hidden = false;
+    if (waytoagiWrapEl) waytoagiWrapEl.hidden = true;
+    if (searchInputEl) searchInputEl.placeholder = "搜索长寿/基因/AI医疗 标题、来源";
+  } else {
+    if (heroTagEl) heroTagEl.textContent = "AI NEWS INTELLIGENCE";
+    if (heroTitleEl) heroTitleEl.textContent = "24 小时 AI 更新雷达";
+    if (heroSubEl) heroSubEl.textContent = "高信号 AI/科技更新，附 WaytoAGI 近 7 日变化。";
+    if (longevityMetaEl) longevityMetaEl.hidden = true;
+    if (waytoagiWrapEl) waytoagiWrapEl.hidden = false;
+    if (searchInputEl) searchInputEl.placeholder = "搜索 AI 信号 / 来源";
+  }
+  refreshTabCounts();
+}
+
+async function ensureAllDataForLongevity() {
+  if (state.allDataLoaded) return;
+  newsListEl.innerHTML = "";
+  const loading = document.createElement("div");
+  loading.className = "empty";
+  loading.textContent = "正在加载全量数据池以筛选长寿科技内容...";
+  newsListEl.appendChild(loading);
+  try {
+    await loadAllModeData();
+  } catch (err) {
+    newsListEl.innerHTML = "";
+    const failed = document.createElement("div");
+    failed.className = "empty";
+    failed.textContent = `加载全量数据失败: ${err.message}`;
+    newsListEl.appendChild(failed);
+    throw err;
+  }
+}
+
+async function switchTopicTab(target) {
+  if (state.topicTab === target) return;
+  state.topicTab = target;
+  // 切到长寿 tab 必须有全量数据
+  if (target === "longevity") {
+    renderTopicTabs();
+    renderModeSwitch();
+    try {
+      await ensureAllDataForLongevity();
+    } catch {
+      return;
+    }
+    state.siteFilter = ""; // 清掉之前的站点过滤,避免和长寿过滤冲突
+    refreshTabCounts();
+    renderModeSwitch();
+    renderSiteFilters();
+    renderList();
+  } else {
+    renderTopicTabs();
+    renderModeSwitch();
+    renderSiteFilters();
+    renderList();
+  }
+}
+
 function effectiveAllItems() {
   return state.allDedup ? state.itemsAll : state.itemsAllRaw;
 }
 
 function modeItems() {
+  // Longevity tab 永远走全量去重数据 + 关键词过滤
+  if (state.topicTab === "longevity") {
+    return effectiveAllItems().filter(matchesLongevity);
+  }
   return state.mode === "all" ? effectiveAllItems() : state.itemsAi;
 }
 
@@ -267,6 +414,12 @@ function getFilteredItems() {
     const hay = `${item.title || ""} ${item.title_zh || ""} ${item.title_en || ""} ${item.site_name || ""} ${item.source || ""}`.toLowerCase();
     return hay.includes(q);
   });
+}
+
+function longevityCount() {
+  // 仅用于 tab 标签上的条数预估;在全量数据加载前用 itemsAi 估算
+  const items = state.allDataLoaded ? effectiveAllItems() : state.itemsAi;
+  return items.filter(matchesLongevity).length;
 }
 
 function renderItemNode(item) {
@@ -628,11 +781,15 @@ async function init() {
     state.generatedAt = payload.generated_at;
 
     setStats(payload);
+    renderTopicTabs();
     renderModeSwitch();
     renderCoverageStrip();
     renderSiteFilters();
     renderList();
     updatedAtEl.textContent = `更新时间：${fmtTime(state.generatedAt)}`;
+
+    // 异步预热全量数据,让长寿 tab 计数尽快出来
+    loadAllModeData().then(() => refreshTabCounts()).catch(() => {});
   } else {
     updatedAtEl.textContent = "新闻数据加载失败";
     newsListEl.innerHTML = `<div class="empty">${newsResult.reason.message}</div>`;
@@ -716,6 +873,18 @@ if (waytoagi7dBtnEl) {
   waytoagi7dBtnEl.addEventListener("click", () => {
     state.waytoagiMode = "7d";
     if (state.waytoagiData) renderWaytoagi(state.waytoagiData);
+  });
+}
+
+if (tabAiBtnEl) {
+  tabAiBtnEl.addEventListener("click", () => {
+    switchTopicTab("ai");
+  });
+}
+
+if (tabLongevityBtnEl) {
+  tabLongevityBtnEl.addEventListener("click", () => {
+    switchTopicTab("longevity");
   });
 }
 

@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>AI Signal Board</title>
+    <title>Nick Radar - AI Signal &amp; Longevity</title>
     <link rel="icon" href="./assets/logo.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="./assets/styles.css" />
   </head>
@@ -12,15 +12,27 @@
       <header class="hero">
         <div class="hero-main">
           <div class="hero-headline">
-            <img class="hero-logo" src="./assets/logo.svg" alt="AI Signal Board Logo" />
+            <img class="hero-logo" src="./assets/logo.svg" alt="Nick Radar Logo" />
             <div>
-              <p class="hero-tag">AI NEWS INTELLIGENCE</p>
-              <h1>24 小时 AI 更新雷达</h1>
+              <p class="hero-tag" id="heroTag">AI NEWS INTELLIGENCE</p>
+              <h1 id="heroTitle">24 小时 AI 更新雷达</h1>
             </div>
           </div>
-          <p class="hero-sub">
+          <p class="hero-sub" id="heroSub">
             高信号 AI/科技更新，附 WaytoAGI 近 7 日变化。
           </p>
+          <nav class="topic-tabs" role="tablist" aria-label="主题频道">
+            <button id="tabAi" class="topic-tab active" type="button" role="tab" aria-selected="true">
+              <span class="topic-tab-icon" aria-hidden="true">🤖</span>
+              <span class="topic-tab-label">AI 信号</span>
+              <span class="topic-tab-count" id="tabAiCount">--</span>
+            </button>
+            <button id="tabLongevity" class="topic-tab" type="button" role="tab" aria-selected="false">
+              <span class="topic-tab-icon" aria-hidden="true">🧬</span>
+              <span class="topic-tab-label">长寿科技</span>
+              <span class="topic-tab-count" id="tabLongevityCount">--</span>
+            </button>
+          </nav>
         </div>
         <div class="hero-meta">
           <span class="updated-label">更新时间</span>
@@ -35,6 +47,11 @@
       <section class="primary-controls">
         <input id="searchInput" type="search" placeholder="搜索 AI 信号 / 来源" />
         <div class="mode-hint" id="modeHint">AI强相关</div>
+      </section>
+
+      <section class="longevity-meta" id="longevityMeta" hidden>
+        <p class="longevity-meta-tagline">🧬 长寿科技 / AI 健康 / 基因治疗 / 意识与神经科学 — 关键词驱动的长尾过滤</p>
+        <p class="longevity-meta-hint" id="longevityMetaHint">从全量数据池中筛选包含长寿/健康/基因等关键词的内容</p>
       </section>
 
       <details class="advanced-panel">
@@ -68,7 +85,7 @@
         </div>
       </details>
 
-      <section class="waytoagi-wrap">
+      <section class="waytoagi-wrap" id="waytoagiWrap">
         <div class="waytoagi-head">
           <h2>WaytoAGI 更新日志</h2>
           <div class="waytoagi-tools">
