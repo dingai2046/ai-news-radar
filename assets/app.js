@@ -31,16 +31,18 @@ const LONGEVITY_KEYWORDS = [
   // 中文 - AI 医疗
   "AI医疗", "AI 医疗", "AI诊断", "AI 诊断", "AI药物", "AI 药物", "AI制药", "AI 制药",
   "数字医疗", "智慧医疗", "精准医疗", "生物科技", "生命科学",
-  // English - longevity/aging
-  "longevity", "aging", "anti-aging", "antiaging", "lifespan", "healthspan",
+  // English - longevity (避免单独 "aging" 误中 managing/imaging/engaging)
+  "longevity", "anti-aging", "antiaging", "anti aging", "lifespan", "healthspan",
+  "aging research", "aging biology", "healthy aging", "aging clock", "aging brain",
   "rejuvenation", "immortal", "immortality", "life extension", "live forever",
   // English - bio/gene
   "gene therapy", "gene editing", "crispr", "stem cell", "telomere",
   "senescence", "senolytic", "epigenetic", "reprogramming", "yamanaka",
   // English - molecules
   "rapamycin", "metformin", "nad+", " nad ", "sirtuin", "autophagy", "mtor",
-  // English - consciousness/neuro
-  "consciousness", "mind upload", "brain-computer", "neuralink", "bci",
+  // English - consciousness/neuro (BCI 避免单独缩写,用全词)
+  "consciousness", "mind upload", "brain-computer", "neuralink",
+  "brain computer interface", "neural interface",
   "alzheimer", "parkinson", "neurodegenerat", "cognitive decline",
   // English - AI medicine
   "ai drug", "ai-drug", "ai diagnos", "ai medicine", "ai health", "ai-health",
