@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-06-16T17:09:06.068713Z",
+  "generated_at": "2026-06-16T20:25:24.909022Z",
   "timezone": "Asia/Shanghai",
   "root_url": "https://waytoagi.feishu.cn/wiki/QPe5w5g7UisbEkkow8XcDmOpn8e?fromScene=spaceOverview",
   "history_url": "https://waytoagi.feishu.cn/wiki/FjiOwWp2giA7hRk6jjfcPioCnAc",
   "window_days": 7,
   "latest_date": "2026-06-16",
-  "count_today": 5,
+  "count_today": 7,
   "updates_today": [
     {
       "date": "2026-06-16",
@@ -19,7 +19,17 @@
     },
     {
       "date": "2026-06-16",
+      "title": "宝玉这篇文章完整拆解了AI编程工具Cursor的崛起与危机：天才创始人打造出年收入数十亿、覆盖多数五百强的爆款产品，却因深度依赖Anthropic，在对方推出同类竞品后遭遇生存冲击。公司紧急自研Composer模型降低外部钳制，又为补足算力绑定SpaceX，曝光价值600亿美金潜在收购协议。让我们一起来看看这背后有什么内幕？",
+      "url": "https://waytoagi.feishu.cn/wiki/QPe5w5g7UisbEkkow8XcDmOpn8e?fromScene=spaceOverview"
+    },
+    {
+      "date": "2026-06-16",
       "title": "作者整理了GitHub 上 Star 数最高的十大Agent Skill，快来看看有没有适合你的Skill。",
+      "url": "https://waytoagi.feishu.cn/wiki/QPe5w5g7UisbEkkow8XcDmOpn8e?fromScene=spaceOverview"
+    },
+    {
+      "date": "2026-06-16",
+      "title": "作者使用Loop Engineering 架构，搭建了一个可自主运转的知识库自动化循环。文中还给出了可直接套用的规则模板与简易脚本，快跟着一起实操试试！",
       "url": "https://waytoagi.feishu.cn/wiki/QPe5w5g7UisbEkkow8XcDmOpn8e?fromScene=spaceOverview"
     },
     {
@@ -33,7 +43,7 @@
       "url": "https://waytoagi.feishu.cn/wiki/QPe5w5g7UisbEkkow8XcDmOpn8e?fromScene=spaceOverview"
     }
   ],
-  "count_7d": 33,
+  "count_7d": 35,
   "updates_7d": [
     {
       "date": "2026-06-16",
@@ -47,7 +57,17 @@
     },
     {
       "date": "2026-06-16",
+      "title": "宝玉这篇文章完整拆解了AI编程工具Cursor的崛起与危机：天才创始人打造出年收入数十亿、覆盖多数五百强的爆款产品，却因深度依赖Anthropic，在对方推出同类竞品后遭遇生存冲击。公司紧急自研Composer模型降低外部钳制，又为补足算力绑定SpaceX，曝光价值600亿美金潜在收购协议。让我们一起来看看这背后有什么内幕？",
+      "url": "https://waytoagi.feishu.cn/wiki/QPe5w5g7UisbEkkow8XcDmOpn8e?fromScene=spaceOverview"
+    },
+    {
+      "date": "2026-06-16",
       "title": "作者整理了GitHub 上 Star 数最高的十大Agent Skill，快来看看有没有适合你的Skill。",
+      "url": "https://waytoagi.feishu.cn/wiki/QPe5w5g7UisbEkkow8XcDmOpn8e?fromScene=spaceOverview"
+    },
+    {
+      "date": "2026-06-16",
+      "title": "作者使用Loop Engineering 架构，搭建了一个可自主运转的知识库自动化循环。文中还给出了可直接套用的规则模板与简易脚本，快跟着一起实操试试！",
       "url": "https://waytoagi.feishu.cn/wiki/QPe5w5g7UisbEkkow8XcDmOpn8e?fromScene=spaceOverview"
     },
     {
